@@ -17,6 +17,13 @@ const Sidebar = () => {
     return time;
   }
 
+  const navItems = [
+    { to: "/", activeIcon: <HiMiniChatBubbleBottomCenterText className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineChatBubbleBottomCenterText className='text-2xl' /> },
+    { to: "/profile", activeIcon: <HiUser className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineUser className='text-2xl' /> },
+    { to: "/settings", activeIcon: <HiCog6Tooth className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineCog6Tooth className='text-2xl' /> },
+    { to: "/media", activeIcon: <HiPhoto className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlinePhoto className='text-2xl' /> }
+  ];
+
   return (
     <div className="drawer-side">
       <label htmlFor="main-sidebar" aria-label="close sidebar" className="drawer-overlay"></label>
@@ -32,57 +39,20 @@ const Sidebar = () => {
 
           <div className="grow flex flex-col gap-2 justify-center items-center">
 
-          <NavLink to="">
-              {({ isActive }) =>
-                isActive ?
-              <button className="w-10 h-10 flex rounded-2xl justify-center items-center bg-emerald-200">
-                <HiMiniChatBubbleBottomCenterText className='text-xl text-emerald-800'/>
-              </button>
-                :
-                <button className="w-10 h-10 flex justify-center items-center">
-                  <HiOutlineChatBubbleBottomCenterText className='text-2xl'/>
-                </button>
-              }
-            </NavLink>
-
-            <NavLink to="/profile">
-              {({ isActive }) =>
-                isActive ?
-                <button className="w-10 h-10 flex rounded-2xl justify-center items-center bg-emerald-200">
-                  <HiUser className='text-xl text-emerald-800'/>
-                </button>
-                :
-                <button className="w-10 h-10 flex justify-center items-center">
-                  <HiOutlineUser className='text-2xl'/>
-                </button>
-              }
-            </NavLink>
-
-            <NavLink to="/settings">
-              {({ isActive }) =>
-                isActive ?
-                <button className="w-10 h-10 flex rounded-2xl justify-center items-center bg-emerald-200">
-                  <HiCog6Tooth className='text-xl text-emerald-800'/>
-                </button>
-                :
-                <button className="w-10 h-10 flex justify-center items-center">
-                  <HiOutlineCog6Tooth className='text-2xl'/>
-                </button>
-              }
-            </NavLink>
-
-            <NavLink to="/media">
-              {({ isActive }) =>
-                isActive ?
-                <button className="w-10 h-10 flex rounded-2xl justify-center items-center bg-emerald-200">
-                  <HiPhoto className='text-xl text-emerald-800'/>
-                </button>
-                :
-                <button className="w-10 h-10 flex justify-center items-center">
-                  <HiOutlinePhoto className='text-2xl'/>
-                </button>
-              }
-            </NavLink>
+            {navItems.map((item, index) => (
+              <NavLink key={index} to={item.to}>
+                {({ isActive }) =>
+                  isActive ?
+                    <button className="w-10 h-10 flex rounded-2xl justify-center items-center bg-emerald-200">
+                      {item.activeIcon}
+                    </button>
+                    :
+                    <button className="w-10 h-10 flex justify-center items-center">
+                      {item.inactiveIcon}
+                    </button>
+                }
+              </NavLink>
+            ))}
 
           </div>
 

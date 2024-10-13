@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineLockClosed, HiOutlineUser, HiPhone } from "react-icons/hi";
 import axios from "axios";
 import useRedirect from "../hooks/useRedirect";
@@ -10,6 +10,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
   const [message, setMessage] = useState({ text: "", success: "" });
+  const [countryCodes, setCountryCodes] = useState([]);
+  const [countryCode, setCountryCode] = useState("+62");
   
   const redirect = useRedirect();
 
@@ -24,7 +26,8 @@ const Register = () => {
         setMessage({text:"Password needs to be at least 6 characters long", success:false});
         return;
       }
-      const response = await axios.post('http://localhost:5000/api/user/register', { name, phoneNumber, password });
+      const fullPhoneNumber = countryCode + phoneNumber;
+      const response = await axios.post('http://localhost:5000/api/user/register', { name, phoneNumber: fullPhoneNumber, password });
       redirect('/login', response.data.message, true);
     } catch (error) {
       if(error.response){
@@ -33,6 +36,26 @@ const Register = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const fetchCountryCodes = async () => {
+      try {
+        const response = await axios.get("https://restcountries.com/v3.1/all");
+        const countries = response.data
+          .map((country) => ({
+            code: country.idd?.root ? country.idd.root + (country.idd.suffixes?.[0] || "") : "",
+          }))
+          .filter((country) => country.code)
+          .sort((a, b) => a.code.localeCompare(b.code));
+
+        setCountryCodes(countries);
+      } catch (error) {
+        console.error("Error fetching country codes:", error);
+      }
+    };
+
+    fetchCountryCodes();
+  }, []);
 
   return (
     <div className="h-screen">
@@ -52,8 +75,18 @@ const Register = () => {
               onChange={(e) => setName(e.target.value)}
             />
           </label>
-          <label className="input input-bordered flex items-center gap-2">
-            <HiPhone />
+          <div className="input input-bordered flex items-center gap-3">
+            <select
+              value={countryCode}
+              onChange={(e) => setCountryCode(e.target.value)}
+              className=""
+            >
+              {countryCodes.map((country) => (
+                <option key={country.code} value={country.code}>
+                  ({country.code})
+                </option>
+              ))}
+            </select>
             <input
               type="text"
               className="grow"
@@ -61,7 +94,7 @@ const Register = () => {
               value={phoneNumber} 
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
-          </label>
+          </div>
           <label className="input input-bordered flex items-center gap-2">
             <HiOutlineLockClosed />
             <input

@@ -40,7 +40,7 @@ export const { setCredentials, clearCredentials } = authSlice.actions;
 //       dispatch(setCredentials(response.data || {}));
 //     }
 //   } catch (error) {
-//     dispatch(setError(error.response?.data?.msg || 'Failed to login'));
+//     dispatch(setError(error.response?.data?.message || 'Failed to login'));
 //   }
 // };
 
@@ -49,19 +49,19 @@ export const { setCredentials, clearCredentials } = authSlice.actions;
 //   e.preventDefault();
 //   try {
 //     if (password !== confPassword) {
-//       return { s: false, msg: "Passwords do not match!" };
+//       return { s: false, message: "Passwords do not match!" };
 //     }
 //     if (password.length < 6) {
-//       return { s: false, msg: "Password needs to be at least 6 characters long" };
+//       return { s: false, message: "Password needs to be at least 6 characters long" };
 //     }
 //     const response = await axios.post('http://localhost:5000/api/user/register', { name, email, password });
 //     if (response.status === 200) {
-//       return { s: true, msg: response.data.msg };
+//       return { s: true, message: response.data.message };
 //     } else {
-//       return { s: false, msg: response.data.msg };
+//       return { s: false, message: response.data.message };
 //     }
 //   } catch (error) {
-//     return { s: false, msg: error.response?.data?.msg };
+//     return { s: false, message: error.response?.data?.message };
 //   }
 // };
 
@@ -91,7 +91,7 @@ export const { setCredentials, clearCredentials } = authSlice.actions;
 //       dispatch(setCredentials(response.data)); // Updating the user info
 //     }
 //   } catch (error) {
-//     dispatch(setError(error.response?.data?.msg || 'Failed to fetch profile'));
+//     dispatch(setError(error.response?.data?.message || 'Failed to fetch profile'));
 //   }
 // };
 
@@ -111,7 +111,7 @@ export const { setCredentials, clearCredentials } = authSlice.actions;
 //       dispatch(setCredentials(response.data));
 //     }
 //   } catch (error) {
-//     dispatch(setError(error.response?.data?.msg || 'Failed to update profile'));
+//     dispatch(setError(error.response?.data?.message || 'Failed to update profile'));
 //   }
 // };
 

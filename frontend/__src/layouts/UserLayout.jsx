@@ -8,7 +8,7 @@ import useRedirect from '../hooks/useRedirect';
 const UserLayout = () => {
 
   const redirect = useRedirect();
-  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
   const { userInfo } = useSelector((state) => state.auth);
   
@@ -20,7 +20,7 @@ const UserLayout = () => {
     }
     
     setName(userInfo.name);
-    setEmail(userInfo.email);
+    setPhoneNumber(userInfo.phone_number);
   }, [userInfo]);
 
   return (

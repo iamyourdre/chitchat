@@ -19,6 +19,10 @@ connectDB.authenticate()
   console.error('Unable to connect to the database:', err);
 });
 
+// (async()=>{
+//   await connectDB.sync();
+// })();
+
 const app = express();
 
 app.use(express.json());

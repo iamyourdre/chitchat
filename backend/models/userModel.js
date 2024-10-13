@@ -1,12 +1,12 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes } from "sequelize";
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
-import connectDB from '../config/db.js'; // Sesuaikan path ke file konfigurasi database Anda
+import connectDB from '../config/db.js';
 
 const User = connectDB.define(
-  'User',
+  'user',
   {
-    _id: {
+    id: {
       type: DataTypes.STRING,
       primaryKey: true,
       allowNull: false,
@@ -16,7 +16,7 @@ const User = connectDB.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    email: {
+    phone_number: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -25,13 +25,21 @@ const User = connectDB.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    profile_picture: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    last_seen: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
   },
   {
     timestamps: true,
     indexes: [
       {
         unique: true,
-        fields: ['email'],
+        fields: ['phone_number'],
       },
       {
         fields: ['name'],
@@ -53,9 +61,5 @@ const User = connectDB.define(
 User.prototype.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-
-// (async()=>{
-//   await connectDB.sync();
-// })();
 
 export default User;

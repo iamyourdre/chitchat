@@ -2,9 +2,26 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import { Outlet } from 'react-router-dom';
+import useRedirect from '../hooks/useRedirect';
+import { useSelector } from 'react-redux';
 
 const UserLayout = () => {
 
+  const redirect = useRedirect();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState('');
+  const { userInfo } = useSelector((state) => state.auth);
+  
+  useEffect(() => {
+    
+    if (!userInfo) {
+      redirect('/login', "You need to login first", true);
+      return;
+    }
+    
+    setName(userInfo.name);
+    setPhoneNumber(userInfo.phone_number);
+  }, [userInfo]);
 
   return (
     <div className="drawer lg:drawer-open z-40 border-r">

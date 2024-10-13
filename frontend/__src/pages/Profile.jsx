@@ -3,15 +3,15 @@ import { useSelector } from 'react-redux';
 
 const Profile = () => {
 
-  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [name, setName] = useState('');
   
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     setName(userInfo.name);
-    setEmail(userInfo.email);
-  }, [userInfo.email, userInfo.name]);
+    setPhoneNumber(userInfo.phoneNumber);
+  }, [userInfo.phoneNumber, userInfo.name]);
 
   return (
     <>
