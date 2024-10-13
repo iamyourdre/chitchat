@@ -5,14 +5,16 @@ import { HiOutlineLockClosed, HiPhone } from "react-icons/hi";
 import axios from "axios";
 import Alert from "../components/Alert";
 import { setCredentials } from "../slices/authSlice";
+import useCountryCodes from "../hooks/useCountryCodes";
 
 const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState({ text: "", success: "" });
+  const [countryCode, setCountryCode] = useState("+62");
 
   const { userInfo } = useSelector((state) => state.auth);
-
+  const { countryCodes } = useCountryCodes();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -20,7 +22,8 @@ const Login = () => {
   const handleLogin = async(e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/user/login', { phoneNumber, password });
+      const fullPhoneNumber = countryCode + phoneNumber;
+      const response = await axios.post('http://localhost:5000/api/user/login', { phoneNumber: fullPhoneNumber, password });
       dispatch(setCredentials(response.data || {}));
       navigate('/');
     } catch (error) {
@@ -46,10 +49,20 @@ const Login = () => {
           
           <Alert message={message.text ? message : location.state?.text ? location.state : ''}/>
 
-          <label className="input input-bordered flex items-center gap-2">
-            <HiPhone />
+          <label className="input input-bordered flex items-center gap-3">
+            <select
+              value={countryCode}
+              onChange={(e) => setCountryCode(e.target.value)}
+              className=""
+            >
+              {countryCodes.map((country, index) => (
+                <option key={index} value={country.code}>
+                  ({country.code}) 
+                </option>
+              ))}
+            </select>
             <input
-              type="text"
+              type="number"
               className="grow"
               placeholder="Phone Number"
               value={phoneNumber} 

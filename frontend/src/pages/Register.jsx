@@ -3,6 +3,7 @@ import { HiOutlineLockClosed, HiOutlineUser, HiPhone } from "react-icons/hi";
 import axios from "axios";
 import useRedirect from "../hooks/useRedirect";
 import Alert from "../components/Alert";
+import useCountryCodes from "../hooks/useCountryCodes";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -10,9 +11,9 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
   const [message, setMessage] = useState({ text: "", success: "" });
-  const [countryCodes, setCountryCodes] = useState([]);
   const [countryCode, setCountryCode] = useState("+62");
   
+  const { countryCodes } = useCountryCodes();
   const redirect = useRedirect();
 
   const handleRegister = async(e) => {
@@ -37,26 +38,6 @@ const Register = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchCountryCodes = async () => {
-      try {
-        const response = await axios.get("https://restcountries.com/v3.1/all");
-        const countries = response.data
-          .map((country) => ({
-            code: country.idd?.root ? country.idd.root + (country.idd.suffixes?.[0] || "") : "",
-          }))
-          .filter((country) => country.code)
-          .sort((a, b) => a.code.localeCompare(b.code));
-
-        setCountryCodes(countries);
-      } catch (error) {
-        console.error("Error fetching country codes:", error);
-      }
-    };
-
-    fetchCountryCodes();
-  }, []);
-
   return (
     <div className="h-screen">
       <div className="h-full content-center px-8">
@@ -75,26 +56,26 @@ const Register = () => {
               onChange={(e) => setName(e.target.value)}
             />
           </label>
-          <div className="input input-bordered flex items-center gap-3">
+          <label className="input input-bordered flex items-center gap-3">
             <select
               value={countryCode}
               onChange={(e) => setCountryCode(e.target.value)}
               className=""
             >
-              {countryCodes.map((country) => (
-                <option key={country.code} value={country.code}>
-                  ({country.code})
+              {countryCodes.map((country, index) => (
+                <option key={index} value={country.code}>
+                  ({country.code}) 
                 </option>
               ))}
             </select>
             <input
-              type="text"
+              type="number"
               className="grow"
               placeholder="Phone Number"
               value={phoneNumber} 
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
-          </div>
+          </label>
           <label className="input input-bordered flex items-center gap-2">
             <HiOutlineLockClosed />
             <input
