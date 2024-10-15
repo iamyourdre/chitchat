@@ -1,21 +1,12 @@
 import React, { useState } from 'react'
 import { useLocation, Link } from 'react-router-dom';
-import { dummyChat } from '../dummy/chats';
-import { HiX } from 'react-icons/hi'
 import { HiCog6Tooth, HiMiniChatBubbleBottomCenterText, HiOutlineChatBubbleBottomCenterText, HiOutlineCog6Tooth, HiOutlinePhoto, HiOutlineUser, HiPhoto, HiUser } from "react-icons/hi2";
 import { BsChatLeftQuoteFill } from "react-icons/bs";
 import { NavLink } from 'react-router-dom';
+import ChatList from './ChatList';
+import SearchContact from './SearchContact';
 
 const Sidebar = () => {
-  
-  const location = useLocation(); 
-  const isActive = (path) => location.pathname === path;
-
-  const shortTime = (t) => {
-    const timeObj = new Date(t);
-    const time = timeObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    return time;
-  }
 
   const navItems = [
     { to: "/", activeIcon: <HiMiniChatBubbleBottomCenterText className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineChatBubbleBottomCenterText className='text-2xl' /> },
@@ -38,7 +29,6 @@ const Sidebar = () => {
           </div>
 
           <div className="grow flex flex-col gap-2 justify-center items-center">
-
             {navItems.map((item, index) => (
               <NavLink key={index} to={item.to}>
                 {({ isActive }) =>
@@ -53,7 +43,6 @@ const Sidebar = () => {
                 }
               </NavLink>
             ))}
-
           </div>
 
           <div className=''>
@@ -62,24 +51,12 @@ const Sidebar = () => {
           
         </div>
 
-        <div className="grow flex flex-col gap-1 lg:pt-8">
-          
-          {dummyChat.map((person, index) => (
-            <NavLink to='/' className="focus:text-slate-700 focus:bg-transparent hover:bg-emerald-100 p-2 px-3 flex gap-3">
-              <div className='my-auto'>
-                <div className='w-10 h-10 rounded-full bg-neutral-100 bg-contain bg-center' style={{ backgroundImage: `url(${person.pp})` }}></div>
-              </div>
-              <div className='flex-1'>
-                <p className='flex justify-between'>
-                  <span className='font-semibold'>{person.name}</span>
-                  <span className='text-xs'>{shortTime(person.time)}</span>
-                </p>
-                <p className='text-slate-500 truncate max-w-56 text-sm'>
-                  {person.chat[0].text}
-                </p>
-              </div>
-            </NavLink>
-          ))}
+        <div className="grow flex flex-col gap-1">
+          <div className='navbar px-3 text-xl border-b'>
+            Chat
+          </div>
+          <SearchContact />
+          <ChatList/>
         </div>
       </div>
     </div>

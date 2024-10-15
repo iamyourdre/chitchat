@@ -1,10 +1,11 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import { ChatRoom, ChatRoomMember, Chat } from '../models/chatModel.js';
+import Contact from '../models/contactModel.js';
 import generateToken from '../utils/generateToken.js';
 
 // @desc    Auth user & get token
-// @route   POST /api/users/auth
+// @route   POST /api/user/auth
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
   try {
@@ -28,7 +29,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Register a new user
-// @route   POST /api/users
+// @route   POST /api/user
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   try {
@@ -60,24 +61,25 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get user profile
-// @route   GET /api/users/profile
+// @route   GET /api/user/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findOne({where: {id:req.user.id}});
-
-  if (user) {
-    res.status(200).json({
-      id: user.id,
-      name: user.name,
-      phone_number: user.phoneNumber,
+  try {
+    const { id } = req.body;
+    const user = await User.findOne({
+      where: {
+        id: id
+      },
+      attributes: ['id', 'name', 'phone_number', 'profile_picture']
     });
-  } else {
-    res.status(404).json({message:'User not found'});
+    return res.status(200).json({user});
+  } catch (error) {
+    console.log(error)
   }
 });
 
 // @desc    Update user profile
-// @route   PUT /api/users/profile
+// @route   PUT /api/user/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findByPk(req.user.id);

@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 
 const port = process.env.PORT || 5000;
 
@@ -20,7 +21,9 @@ connectDB.authenticate()
 });
 
 // (async()=>{
-//   await connectDB.sync();
+//   await connectDB.sync(
+//     // { alter: true }
+//   );
 // })();
 
 const app = express();
@@ -32,6 +35,7 @@ app.use(cors({credentials:true, origin:'http://localhost:5173'}));
 app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
+app.use('/api/contact', contactRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();

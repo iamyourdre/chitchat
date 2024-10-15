@@ -1,9 +1,44 @@
-
+# Register
+###
 POST http://localhost:5000/api/user/register
 Content-Type: application/json
 
 {
-  "name": "Adrian S",
-  "phoneNumber": "082269206524",
+  "name": "Messi",
+  "phoneNumber": "+628577728163",
   "password": "123456"
+}
+
+# Login
+###
+POST http://localhost:5000/api/user/login
+Content-Type: application/json
+
+{
+  "phoneNumber": "+6282269206524",
+  "password": "123456"
+}
+
+# Logout
+###
+DELETE http://localhost:5000/api/user/logout
+
+# Get Profile
+###
+GET http://localhost:5000/api/user/profile
+Content-Type: application/json
+
+{
+  "id": "c7ff30ea-c982-4296-bd53-edc6623841c7"
+}
+
+# Search Contact
+###
+
+GET http://localhost:5000/api/contact/search
+Content-Type: application/json
+
+{
+  "id": "c7ff30ea-c982-4296-bd53-edc6623841c7",
+  "phoneNumber": "+62"
 }
