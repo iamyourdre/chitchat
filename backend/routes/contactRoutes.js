@@ -4,6 +4,6 @@ import { searchContact } from '../controllers/contactController.js';
 
 const router = express.Router();
   
-router.get('/search', protect, searchContact);
+router.post('/search', protect, searchContact);
 
 export default router;

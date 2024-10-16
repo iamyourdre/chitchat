@@ -4,8 +4,8 @@ POST http://localhost:5000/api/user/register
 Content-Type: application/json
 
 {
-  "name": "Messi",
-  "phoneNumber": "+628577728163",
+  "name": "Kaldeniz",
+  "phoneNumber": "+6285775296045",
   "password": "123456"
 }
 
@@ -35,10 +35,10 @@ Content-Type: application/json
 # Search Contact
 ###
 
-GET http://localhost:5000/api/contact/search
+POST http://localhost:5000/api/contact/search
 Content-Type: application/json
 
 {
-  "id": "c7ff30ea-c982-4296-bd53-edc6623841c7",
-  "phoneNumber": "+62"
+  "id": "f8e9c169-195e-4d37-a1be-2f40d1c9a499",
+  "phoneNumber": ""
 }

@@ -14,7 +14,7 @@ const UserLayout = () => {
   useEffect(() => {
     
     if (!userInfo) {
-      navigate('/');
+      navigate('/login');
       return;
     }
     

@@ -14,11 +14,11 @@ const loginUser = asyncHandler(async (req, res) => {
       where: {phone_number:phoneNumber}
     });
     if (user && (await user.matchPassword(password))) {
-      generateToken(res, user.id);
+      const token = generateToken(res, user.id);
       res.status(200).json({
         id: user.id,
         name: user.name,
-        phone_number: user.phoneNumber
+        phone_number: user.phone_number,
       });
     } else {
       res.status(401).json({message:'Invalid phone number or password'});

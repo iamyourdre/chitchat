@@ -30,6 +30,7 @@ const Contact = connectDB.define('contact', {
   freezeTableName: true
 });
 
-Contact.belongsTo(User, { foreignKey: 'owner_id' });
+Contact.belongsTo(User, { foreignKey: 'owner_id', as: 'owner' });
+Contact.belongsTo(User, { foreignKey: 'contact_number', as: 'contactPerson' });
 
 export default Contact;

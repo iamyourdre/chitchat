@@ -23,9 +23,13 @@ const Login = () => {
     e.preventDefault();
     try {
       const fullPhoneNumber = countryCode + phoneNumber;
-      const response = await axios.post('http://localhost:5000/api/user/login', { phoneNumber: fullPhoneNumber, password });
+      const response = await axios.post('http://localhost:5000/api/user/login',
+        { phoneNumber: fullPhoneNumber, password },
+        { withCredentials: true }
+      );
+      console.log(response);
       dispatch(setCredentials(response.data || {}));
-      navigate('/');
+      // navigate('/');
     } catch (error) {
       if(error.response){
         console.log(error.response.data.message);
