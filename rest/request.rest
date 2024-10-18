@@ -32,13 +32,24 @@ Content-Type: application/json
   "id": "c7ff30ea-c982-4296-bd53-edc6623841c7"
 }
 
-# Search Contact
+# Search Phone Number
 ###
 
-POST http://localhost:5000/api/contact/search
+POST http://localhost:5000/api/contact/search/all
 Content-Type: application/json
 
 {
   "id": "f8e9c169-195e-4d37-a1be-2f40d1c9a499",
-  "phoneNumber": ""
+  "phoneNumber": "+62"
+}
+
+# Search Contact
+###
+
+POST http://localhost:5000/api/contact/search/saved
+Content-Type: application/json
+
+{
+  "id": "f8e9c169-195e-4d37-a1be-2f40d1c9a499",
+  "phoneNumber": "+183719366"
 }

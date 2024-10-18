@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middlewares/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import chatRoutes from './routes/chatRoutes.js';
 
 const port = process.env.PORT || 5000;
 
@@ -36,6 +37,7 @@ app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/chat', chatRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();

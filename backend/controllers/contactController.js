@@ -5,22 +5,35 @@ import { Op } from 'sequelize';
 
 const saveContact = asyncHandler(async (req, res) => {
   try {
-    const { ownerNumber, contactNumber } = req.body;
-    const contact = await User.findOne({where: {phone_number:contactNumber}});
-    if (contact) {
-      return res.status(400).json({message:'Phone number not registered'});
-    }
+    const { id, contactNumber } = req.body;
     const save = await Contact.create({
-      owner_number: ownerNumber,
+      owner_id: id,
       contact_number: contactNumber,
     });
-    return res.status(200).json({message: 'Contact added successful!'});
+    return res.status(200).json(save);
   } catch (error) {
     console.log(error)
   }
 });
 
 const searchContact = asyncHandler(async (req, res) => {
+  try {
+    const { id, phoneNumber } = req.body;
+    const searchContact = await Contact.findOne({
+      where: {
+        id: id,
+      }
+    });
+    if (searchContact) {
+      return res.status(200).json(searchContact);
+    }
+    return res.status(400).json({message:`${phoneNumber} not found`});
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+const searchPhoneNumber = asyncHandler(async (req, res) => {
   try {
     const { id, phoneNumber } = req.body;
     const listOfContacts = [];
@@ -39,7 +52,7 @@ const searchContact = asyncHandler(async (req, res) => {
         },
         attributes: ['name', 'phone_number', 'profile_picture']
       });
-      listOfContacts.push(contact);
+      listOfContacts.push({id: c.id, contact});
     }
     if (listOfContacts.length>0) {
       return res.status(200).json({contact:listOfContacts, stranger:null});
@@ -61,5 +74,6 @@ const searchContact = asyncHandler(async (req, res) => {
 
 export {
   saveContact,
+  searchPhoneNumber,
   searchContact
 }

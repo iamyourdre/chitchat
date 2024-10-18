@@ -1,4 +1,5 @@
 import { ChatRoom, ChatRoomMember, Chat } from '../models/chatModel.js';
+import Contact from '../models/contactModel.js';
 import User from '../models/userModel.js';
 
 // Menampilkan daftar ChatRoom yang user terlibat
@@ -24,38 +25,55 @@ export const getChatRoomsForUser = async (req, res) => {
   }
 };
 
-// Membuat ChatRoom 1-on-1 atau grup
 export const createChatRoom = async (req, res) => {
   try {
-    const { phone_numbers, chat_name } = req.body; // Array phone_numbers untuk grup atau single untuk 1-on-1
-    const isGroup = phone_numbers.length > 1;
+    const { id, contact_id, chatName, isGroup } = req.body;
 
-    // Temukan semua user berdasarkan phone_number
-    const users = await User.findAll({
-      where: {
-        phone_number: phone_numbers
-      }
-    });
-
-    if (users.length !== phone_numbers.length) {
-      return res.status(400).json({ message: 'Some users not found' });
-    }
-
-    // Buat ChatRoom
-    const newChatRoom = await ChatRoom.create({
-      chat_name: isGroup ? chat_name : null,
-      is_group: isGroup
-    });
-
-    // Tambahkan users ke ChatRoomMember
-    for (const user of users) {
+    if(!isGroup){
+      const searchContact = await Contact.findOne({
+        where: {
+          id: contact_id,
+        }
+      });
+      const member = await User.findOne({
+        where: {
+          phone_number: searchContact.contact_number
+        }
+      })
+      const newChatRoom = await ChatRoom.create({
+        chat_name: null,
+        is_group: false
+      });
       await ChatRoomMember.create({
         chat_room_id: newChatRoom.id,
-        user_id: user.id
+        user_id: member.id
       });
+      return res.status(201).json(newChatRoom);
     }
 
-    res.status(201).json(newChatRoom);
+    // const users = await User.findAll({
+    //   where: {
+    //     phone_number: phone_numbers
+    //   }
+    // });
+
+    // if (users.length !== phone_numbers.length) {
+    //   return res.status(400).json({ message: 'Some users not found' });
+    // }
+
+    // const newChatRoom = await ChatRoom.create({
+    //   chat_name: isGroup ? chat_name : null,
+    //   is_group: isGroup
+    // });
+
+    // // Tambahkan users ke ChatRoomMember
+    // for (const user of users) {
+    //   await ChatRoomMember.create({
+    //     chat_room_id: newChatRoom.id,
+    //     user_id: user.id
+    //   });
+    // }
+
   } catch (error) {
     console.error(error);
   }

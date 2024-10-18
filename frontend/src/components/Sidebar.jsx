@@ -24,7 +24,7 @@ const Sidebar = () => {
       setIsLoadingSearch(true);
 
       const response = await axios.post(
-        'http://localhost:5000/api/contact/search',
+        'http://localhost:5000/api/contact/search/all',
         { id: userInfo.id, phoneNumber: search },
         { withCredentials: true }
       );

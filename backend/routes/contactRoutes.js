@@ -1,9 +1,11 @@
 import express from 'express';
 import { protect } from '../middlewares/authMiddleware.js';
-import { searchContact } from '../controllers/contactController.js';
+import { saveContact, searchPhoneNumber, searchContact } from '../controllers/contactController.js';
 
 const router = express.Router();
   
-router.post('/search', protect, searchContact);
+router.post('/search/all', protect, searchPhoneNumber);
+router.post('/search/saved', protect, searchContact);
+router.post('/save', protect, saveContact);
 
 export default router;
