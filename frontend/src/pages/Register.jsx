@@ -28,8 +28,8 @@ const Register = () => {
         return;
       }
       const fullPhoneNumber = countryCode + phoneNumber;
-      const response = await axios.post('http://localhost:5000/api/user/register', { name, phoneNumber: fullPhoneNumber, password });
-      redirect('/login', response.data.message, true);
+      const response = await axios.post('http://localhost:5000/api/user/register', { name, phone_number: fullPhoneNumber, password });
+      redirect('/', response.data.message, true);
     } catch (error) {
       if(error.response){
         console.log(error.response.data.message);
@@ -97,7 +97,7 @@ const Register = () => {
             />
           </label>
           <button className="btn btn-neutral" type="submit">Register</button>
-          <p>Already have an account? <a href="/login" className="link">Login</a></p>
+          <p>Already have an account? <a href="/" className="link">Login</a></p>
         </form>
       </div>
     </div>

@@ -1,5 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import { ChatRoom, ChatRoomMember, Chat } from '../models/chatModel.js';
+import Contact from '../models/contactModel.js';
 import generateToken from '../utils/generateToken.js';
 
 // @desc    Auth user & get token
@@ -7,12 +9,12 @@ import generateToken from '../utils/generateToken.js';
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
   try {
-    const { phone_number, password } = req.body;
+    const { phoneNumber, password } = req.body;
     const user = await User.findOne({
-      where: {phone_number},
+      where: {phone_number:phoneNumber}
     });
     if (user && (await user.matchPassword(password))) {
-      generateToken(res, user.id);
+      const token = generateToken(res, user.id);
       res.status(200).json({
         id: user.id,
         name: user.name,
@@ -31,14 +33,14 @@ const loginUser = asyncHandler(async (req, res) => {
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
   try {
-    const { name, phone_number, password } = req.body;
-    const userExists = await User.findOne({where: {phone_number}});
+    const { name, phoneNumber, password } = req.body;
+    const userExists = await User.findOne({where: {phone_number:phoneNumber}});
     if (userExists) {
       return res.status(400).json({message:'Phone number already used'});
     }
     const user = await User.create({
       name,
-      phone_number,
+      phone_number: phoneNumber,
       password,
     });
     return res.status(200).json({message: 'Registration success, login now!'});

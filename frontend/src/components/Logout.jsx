@@ -15,7 +15,7 @@ const Logout = () => {
     try {
       const response = await axios.delete('http://localhost:5000/api/user/logout');
       dispatch(clearCredentials());
-      redirect('/login', response.data.message, true);
+      redirect('/', response.data.message, true);
       return;
     } catch (error) {
       if(error.response){

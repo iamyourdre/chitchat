@@ -3,7 +3,7 @@ import connectDB from '../config/db.js';
 import { v4 as uuidv4 } from 'uuid';
 import User from "./userModel.js";
 
-// Definisikan model ChatRoom
+// Definisikan model dulu (tanpa relasi)
 const ChatRoom = connectDB.define('chat_room', {
   id: {
     type: DataTypes.STRING,
@@ -19,11 +19,11 @@ const ChatRoom = connectDB.define('chat_room', {
     type: DataTypes.BOOLEAN,
     defaultValue: false
   },
-  last_chat_id: {
+  last_chat_id: { // Mereferensi chat terakhir
     type: DataTypes.STRING,
     allowNull: true,
     references: {
-      model: 'chat',
+      model: 'chat', // Nama tabel yang direferensikan
       key: 'id',
     },
   }
@@ -31,7 +31,6 @@ const ChatRoom = connectDB.define('chat_room', {
   freezeTableName: true
 });
 
-// Definisikan model ChatRoomMember
 const ChatRoomMember = connectDB.define('chat_room_member', {
   id: {
     type: DataTypes.STRING,
@@ -54,17 +53,11 @@ const ChatRoomMember = connectDB.define('chat_room_member', {
       model: User,
       key: 'id'
     }
-  },
-  role: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 0
   }
 }, {
   freezeTableName: true
 });
 
-// Definisikan model Chat
 const Chat = connectDB.define('chat', {
   id: {
     type: DataTypes.STRING,
@@ -84,7 +77,7 @@ const Chat = connectDB.define('chat', {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
-  sender_id: {
+  sender_id: {  // Mereferensi sender (User)
     type: DataTypes.STRING,
     allowNull: false,
     references: {
@@ -104,40 +97,23 @@ const Chat = connectDB.define('chat', {
   freezeTableName: true
 });
 
-// RELASI ANTAR MODEL
-// Relasi antara ChatRoom dan ChatRoomMember
-ChatRoom.hasMany(ChatRoomMember, {
-  foreignKey: 'chat_room_id',
-  as: 'members'  // Alias relasi
-});
+// 1. ChatRoom memiliki banyak ChatRoomMember
+ChatRoom.hasMany(ChatRoomMember, { foreignKey: 'chat_room_id' });
+ChatRoomMember.belongsTo(ChatRoom, { foreignKey: 'chat_room_id' });
 
-ChatRoomMember.belongsTo(ChatRoom, {
-  foreignKey: 'chat_room_id',
-  as: 'chat_room' // Alias relasi balik
-});
+// 2. ChatRoomMember mereferensi User
+ChatRoomMember.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(ChatRoomMember, { foreignKey: 'user_id' });
 
-// Relasi antara ChatRoomMember dan User
-ChatRoomMember.belongsTo(User, {
-  foreignKey: 'user_id',
-  as: 'user_data' // Alias relasi ke User
-});
+// 3. ChatRoom memiliki banyak Chat
+ChatRoom.hasMany(Chat, { foreignKey: 'chat_room_id' });
+Chat.belongsTo(ChatRoom, { foreignKey: 'chat_room_id' });
 
-// Relasi antara Chat dan ChatRoom
-Chat.belongsTo(ChatRoom, {
-  foreignKey: 'chat_room_id',
-  as: 'chat_room_data'  // Alias relasi ke ChatRoom
-});
+// 4. ChatRoom memiliki referensi ke Chat terakhir (last_chat)
+ChatRoom.belongsTo(Chat, { as: 'last_chat', foreignKey: 'last_chat_id' });
 
-// Relasi antara Chat dan User
-Chat.belongsTo(User, {
-  foreignKey: 'sender_id',
-  as: 'sender_data'  // Alias relasi ke User
-});
-
-// Relasi antara ChatRoom dan Chat untuk last_chat_id
-ChatRoom.belongsTo(Chat, {
-  foreignKey: 'last_chat_id',
-  as: 'last_chat_data'  // Alias untuk last chat
-});
+// 5. Chat memiliki referensi ke sender (User)
+Chat.belongsTo(User, { foreignKey: 'sender_id' });
+User.hasMany(Chat, { foreignKey: 'sender_id' });
 
 export { ChatRoom, ChatRoomMember, Chat };

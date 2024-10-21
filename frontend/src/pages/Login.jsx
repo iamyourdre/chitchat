@@ -24,12 +24,11 @@ const Login = () => {
     try {
       const fullPhoneNumber = countryCode + phoneNumber;
       const response = await axios.post('http://localhost:5000/api/user/login',
-        { phoneNumber: fullPhoneNumber, password },
+        { phone_number: fullPhoneNumber, password },
         { withCredentials: true }
       );
-      console.log(response);
       dispatch(setCredentials(response.data || {}));
-      // navigate('/');
+      navigate('/chat');
     } catch (error) {
       if(error.response){
         console.log(error.response.data.message);
@@ -40,7 +39,7 @@ const Login = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      navigate('/chat');
       return;
     }
   }, [userInfo]);

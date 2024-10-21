@@ -4,7 +4,6 @@ import User from '../models/userModel.js';
 
 const protect = asyncHandler(async (req, res, next) => {
   let token;
-
   token = req.cookies.jwt;
 
   if (token) {
@@ -18,7 +17,7 @@ const protect = asyncHandler(async (req, res, next) => {
         throw new Error('User not found');
       }
 
-      req.user = user;  // Menyimpan pengguna ke req.user
+      req.user = user;
 
       next();
     } catch (error) {

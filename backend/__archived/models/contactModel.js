@@ -10,7 +10,7 @@ const Contact = connectDB.define('contact', {
     allowNull: false,
     defaultValue: () => uuidv4(),
   },
-  saver_id: {
+  owner_id: {
     type: DataTypes.STRING,
     references: {
       model: User,
@@ -26,14 +26,11 @@ const Contact = connectDB.define('contact', {
     },
     allowNull: false
   },
-  contact_name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
 }, {
   freezeTableName: true
 });
 
-Contact.belongsTo(User, {foreignKey: 'contact_number', targetKey: 'phone_number', as: 'contact_data'})
+Contact.belongsTo(User, { foreignKey: 'owner_id', as: 'owner' });
+Contact.belongsTo(User, { foreignKey: 'contact_number', as: 'contactPerson' });
 
 export default Contact;

@@ -9,47 +9,41 @@ Content-Type: application/json
   "password": "123456"
 }
 
+
 # Login
 ###
 POST http://localhost:5000/api/user/login
 Content-Type: application/json
 
 {
-  "phoneNumber": "+6282269206524",
+  "phone_number": "+6282269206524",
   "password": "123456"
 }
+
 
 # Logout
 ###
 DELETE http://localhost:5000/api/user/logout
 
-# Get Profile
+
+# router.post('/search', protect, searchContact)
 ###
-GET http://localhost:5000/api/user/profile
+
+POST http://localhost:5000/api/contact/search
 Content-Type: application/json
 
 {
-  "id": "c7ff30ea-c982-4296-bd53-edc6623841c7"
+  "saver_id": "cee1b153-a19b-4c30-a3d5-0480df8a33e0",
+  "query": "12"
 }
 
-# Search Phone Number
+# router.post('/createRoom', protect, createOneOnOneChat)
 ###
 
-POST http://localhost:5000/api/contact/search/all
+POST http://localhost:5000/api/chat/createRoom
 Content-Type: application/json
 
 {
-  "id": "f8e9c169-195e-4d37-a1be-2f40d1c9a499",
-  "phoneNumber": "+62"
-}
-
-# Search Contact
-###
-
-POST http://localhost:5000/api/contact/search/saved
-Content-Type: application/json
-
-{
-  "id": "f8e9c169-195e-4d37-a1be-2f40d1c9a499",
-  "phoneNumber": "+183719366"
+  "user1_id": "cee1b153-a19b-4c30-a3d5-0480df8a33e0",
+  "user2_number": "+1234"
 }

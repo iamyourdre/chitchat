@@ -7,7 +7,7 @@ import { LuSearch } from 'react-icons/lu';
 import PulseLoader from "react-spinners/PulseLoader";
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import SearchList from './SearchList';
+import ContactList from './ContactList';
 
 const Sidebar = () => {
 
@@ -22,15 +22,13 @@ const Sidebar = () => {
     if (!search.trim()) return;
     try {
       setIsLoadingSearch(true);
-
       const response = await axios.post(
-        'http://localhost:5000/api/contact/search/all',
-        { id: userInfo.id, phoneNumber: search },
+        'http://localhost:5000/api/contact/search',
+        { saver_id: userInfo.id, query: search },
         { withCredentials: true }
       );
-
       setIsLoadingSearch(false);
-      response && setSearchResult({contact: await response.data.contact, stranger: await response.data.stranger});
+      response && setSearchResult(response.data);
     } catch (error) {
       setIsLoadingSearch(false);
       if (error.response) {
@@ -50,7 +48,7 @@ const Sidebar = () => {
   }, [search]);
 
   const navItems = [
-    { to: "/", activeIcon: <HiMiniChatBubbleBottomCenterText className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineChatBubbleBottomCenterText className='text-2xl' /> },
+    { to: "/chat", activeIcon: <HiMiniChatBubbleBottomCenterText className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineChatBubbleBottomCenterText className='text-2xl' /> },
     { to: "/profile", activeIcon: <HiUser className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineUser className='text-2xl' /> },
     { to: "/settings", activeIcon: <HiCog6Tooth className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlineCog6Tooth className='text-2xl' /> },
     { to: "/media", activeIcon: <HiPhoto className='text-xl text-emerald-800' />, inactiveIcon: <HiOutlinePhoto className='text-2xl' /> }
@@ -103,8 +101,11 @@ const Sidebar = () => {
               </div>
             </div>
           )}
-          {/* {searchResult && console.log(searchResult)} */}
-          {searchResult && <SearchList list={searchResult}/>}
+          {searchResult && 
+            <div onClick={(e) => setSearch('')}>
+              <ContactList list={searchResult}/>
+            </div>
+          }
           {isChatListVisible && <ChatList />}
         </div>
       </div>
