@@ -37,7 +37,7 @@ Content-Type: application/json
   "query": "12"
 }
 
-# router.post('/createRoom', protect, createOneOnOneChat)
+# router.post('/createRoom', protect, createOneOnOneRoom)
 ###
 
 POST http://localhost:5000/api/chat/createRoom
@@ -46,4 +46,47 @@ Content-Type: application/json
 {
   "user1_id": "cee1b153-a19b-4c30-a3d5-0480df8a33e0",
   "user2_number": "+1234"
+}
+
+# router.post('/room', protect, findRoomById)
+###
+
+POST http://localhost:5000/api/chat/findRoom
+Content-Type: application/json
+
+{
+  "room_id": "e727502a-c5af-4e55-877d-4290713948c7"
+}
+
+# router.post('/listRoom', protect, listRoomByUser)
+###
+
+POST http://localhost:5000/api/chat/listRoom
+Content-Type: application/json
+
+{
+  "user_id": "cee1b153-a19b-4c30-a3d5-0480df8a33e0"
+}
+
+# router.post('/send', protect, sendChat)
+###
+
+POST http://localhost:5000/api/chat/send
+Content-Type: application/json
+
+{
+  "text": "Fourth chat",
+  "sender_id": "cee1b153-a19b-4c30-a3d5-0480df8a33e0",
+  "chat_room_id": "e727502a-c5af-4e55-877d-4290713948c7"
+}
+
+# router.post('/send', protect, sendChat)
+###
+
+POST http://localhost:5000/api/chat/refresh
+Content-Type: application/json
+
+{
+  "chat_room_id": "e727502a-c5af-4e55-877d-4290713948c7",
+  "last_update": "2024-10-24T06:39:04.000Z"
 }
